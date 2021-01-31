@@ -77,7 +77,9 @@ Chassis& Chassis::conf_trk(int prm_trk_l, int prm_trk_r)
         std::abs(prm_trk_r) + 1,
         (prm_trk_r > 0) ? false : true
     );
+
     reset_trk();
+    return *this;
 }
 
 void Chassis::drive_mov(int prm_mov_l, int prm_mov_r)
