@@ -1,6 +1,6 @@
 //* Driver source file
 //* Created: 1/27/2021
-//* Last modified: 1/27/2021
+//* Last modified: 1/30/2021
 
 //* Main header
 #include "main.h"
@@ -10,17 +10,18 @@
 
 Chassis::Chassis(
     int prm_mtr_lf, int prm_mtr_lb, int prm_mtr_rf, int prm_mtr_rb,
-    int prm_trk_1a, int prm_trk_1b, int prm_trk_2a, int prm_trk_2b,
+    int prm_trk_1a, int prm_trk_2a,
     pros::motor_brake_mode_e    prm_brake,
     pros::motor_encoder_units_e prm_unit,
     pros::motor_gearset_e       prm_cart
-)   : m_mtr_lf {prm_mtr_lf}, m_mtr_lb {prm_mtr_lb}, m_mtr_rf {prm_mtr_rf}, m_mtr_rb {prm_mtr_rb},
-      m_trk_1a {prm_trk_1a}, m_trk_1b {prm_trk_1b}, m_trk_2a {prm_trk_2a}, m_trk_2b {prm_trk_2b},
+)   : m_mtr_lf {std::abs(prm_mtr_lf)}, m_mtr_lb {std::abs(prm_mtr_lb)}, m_mtr_rf {std::abs(prm_mtr_rf)}, m_mtr_rb {std::abs(prm_mtr_rb)},
       m_brake  {prm_brake},  m_unit   {prm_unit},   m_cart   {prm_cart}
 {
     set_brake(prm_brake);
     set_unit(prm_unit);
     set_cart(prm_cart);
+    set_revr(prm_mtr_lf, prm_mtr_lb, prm_mtr_rf, prm_mtr_rb);
+    conf_trk(prm_trk_1a, prm_trk_2a);
 }
 
 Chassis& Chassis::set_brake(pros::motor_brake_mode_e prm_brake)
@@ -48,6 +49,33 @@ Chassis& Chassis::set_cart(pros::motor_gearset_e prm_cart)
     pros::c::motor_set_gearing(m_mtr_rf, prm_cart);
     pros::c::motor_set_gearing(m_mtr_rb, prm_cart);
     return *this;
+}
+
+Chassis& Chassis::set_revr(int prm_mtr_lf, int prm_mtr_lb, int prm_mtr_rf, int prm_mtr_rb)
+{
+    pros::c::motor_set_reversed(m_mtr_lf, (prm_mtr_lf > 0) ? false : true);
+    pros::c::motor_set_reversed(m_mtr_lb, (prm_mtr_lb > 0) ? false : true);
+    pros::c::motor_set_reversed(m_mtr_rf, (prm_mtr_rf > 0) ? false : true);
+    pros::c::motor_set_reversed(m_mtr_rb, (prm_mtr_rb > 0) ? false : true);
+    return *this;
+}
+
+Chassis& Chassis::conf_trk(int prm_trk_1a, int prm_trk_2a)
+{
+    pros::c::adi_port_set_config(std::abs(prm_trk_1a), pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_1a) + 1, pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_2a), pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_2a) + 1, pros::E_ADI_DIGITAL_IN);
+    m_trk_l = pros::c::adi_encoder_init(
+        std::abs(prm_trk_1a),
+        std::abs(prm_trk_1a) + 1,
+        (prm_trk_1a > 0) ? false : true
+    );
+    m_trk_r = pros::c::adi_encoder_init(
+        std::abs(prm_trk_2a),
+        std::abs(prm_trk_2a) + 1,
+        (prm_trk_2a > 0) ? false : true
+    );
 }
 
 void Chassis::drive_mov(int prm_mov_l, int prm_mov_r)
