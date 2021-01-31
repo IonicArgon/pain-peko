@@ -11,5 +11,6 @@
 
 extern Chassis* chassis_obj;
 extern Shooter* shooter_obj;
+extern pros::Controller ctrl_m;
 
 #endif // H_GLOBALS_HPP

@@ -6,6 +6,8 @@
 #include "main.h"
 
 //* Subsystem headers
+#include "lib/hardware/drive.hpp"
+#include "lib/hardware/succ.hpp"
 #include "lib/hardware/globals.hpp"
 
 
