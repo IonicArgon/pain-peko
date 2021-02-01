@@ -1,4 +1,3 @@
 <p align="center">
-    <img src="humu.gif"></br>
-    <h1 align="center">*humu intensifies*</hi>
+    <img style = "width:500px;height:500px" src="bowser.jpg"></br>
 </p>
