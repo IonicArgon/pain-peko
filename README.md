@@ -1,3 +1,4 @@
 <p align="center">
-    <img src="cat.gif"></br>
+    <img src="humu.gif"></br>
+    <h1 align="center">*humu intensifies*</hi>
 </p>
