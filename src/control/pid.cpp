@@ -80,6 +80,7 @@ void pid_control::start()
 {
     if (!(approx_float_eq(m_target_dist, 0.0, 1e-12, 1e-8)) && !(approx_float_eq(m_target_rot, 0.0, 1e-12, 1e-8)))
     {
+        task_calc_crve.resume();
         task_calc_crve.notify();
         if (m_waiting_for_settle == true)
             while (task_calc_crve.get_state() == pros::E_TASK_STATE_RUNNING)
@@ -87,6 +88,7 @@ void pid_control::start()
     }
     else if (!(approx_float_eq(m_target_dist, 0.0, 1e-12, 1e-8)) && approx_float_eq(m_target_rot, 0.0, 1e-12, 1e-8))
     {
+        task_calc_dist.resume();
         task_calc_dist.notify();
         if (m_waiting_for_settle == true)
             while (task_calc_dist.get_state() == pros::E_TASK_STATE_RUNNING)
@@ -94,13 +96,13 @@ void pid_control::start()
     }
     else if (approx_float_eq(m_target_dist, 0.0, 1e-12, 1e-8) && !(approx_float_eq(m_target_rot, 0.0, 1e-12, 1e-8)))
     {
+        task_calc_turn.resume();
         task_calc_turn.notify();
         if (m_waiting_for_settle == true)
             while (task_calc_turn.get_state() == pros::E_TASK_STATE_RUNNING)
                 pros::delay(1);
     }
 
-    m_waiting_for_settle = false;
     reset();
 }
 
