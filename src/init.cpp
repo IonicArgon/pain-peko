@@ -1,6 +1,6 @@
 //* Initialization code
 //* Created: 1/27/2021
-//* Last modified: 1/30/2021
+//* Last modified: 1/31/2021
 
 //* Main header
 #include "main.h"
@@ -14,7 +14,7 @@
 //* Initialization callback
 void initialize(void)
 {
-    chassis_obj = new Chassis{19, 20, -9, -10, 5, 1};
+    chassis_obj = new Chassis{19, 20, -9, -10, 5, -1};
     shooter_obj = new Shooter{-15, -8, 17, -7};
 }
 
