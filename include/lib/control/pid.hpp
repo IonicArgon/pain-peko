@@ -19,7 +19,7 @@ struct pid_gains
 class pid_control
 {
 public:
-    pid_control(pid_gains gains);
+    explicit pid_control(pid_gains gains);
     pid_control& reset();
     pid_control& wait_until_settled();
     pid_control& set_gains(pid_gains gains);
