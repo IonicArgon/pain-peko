@@ -13,7 +13,7 @@ struct pid_gains
     double gain_kD;
     double gain_delta_t;
     double gain_tick_range;
-    double gain_slew_rate;
+    int gain_slew_rate;
 };
 
 class pid_control
@@ -24,6 +24,7 @@ public:
     pid_control& wait_until_settled();
     pid_control& set_gains(pid_gains gains);
     pid_control& set_rot_targ(int rot_ticks);
+    pid_control& set_rot_targ(double rot_degs);
     pid_control& set_dist_targ(int dist_ticks);
     void start();
 
@@ -31,11 +32,12 @@ private:
     double  m_gain_kP,
             m_gain_kD,
             m_gain_delta_t,
-            m_gain_tick_range,
-            m_gain_slew_rate;
+            m_gain_tick_range;
+    int     m_gain_slew_rate;
     
     int m_target_dist;
-    double m_target_rot;
+    int m_target_rot_ticks;
+    double m_target_rot_degs;
 
     double m_targ_l, m_targ_r;
     double m_err_l, m_err_r;
@@ -45,12 +47,10 @@ private:
 
     bool m_waiting_for_settle;
 
-    void calc_dist();
-    void calc_turn();
+    void calc_dist_turn();
     void calc_crve();
 
-    pros::Task task_calc_dist;
-    pros::Task task_calc_turn;
+    pros::Task task_calc_dist_turn;
     pros::Task task_calc_crve;
 };
 
