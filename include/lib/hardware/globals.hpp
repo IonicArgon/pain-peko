@@ -13,4 +13,12 @@ extern Chassis* chassis_obj;
 extern Shooter* shooter_obj;
 extern pros::Controller ctrl_m;
 
+enum class auto_select
+{
+    LIVE,
+    SKILLS
+};
+
+extern auto_select path_selection;
+
 #endif // H_GLOBALS_HPP

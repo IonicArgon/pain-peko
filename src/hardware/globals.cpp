@@ -13,3 +13,6 @@ Shooter* shooter_obj;
 
 //* Global controller because i need it
 pros::Controller ctrl_m{pros::controller_id_e_t::E_CONTROLLER_MASTER};
+
+//* funny auto select thing
+auto_select path_selection;
