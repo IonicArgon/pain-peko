@@ -121,7 +121,6 @@ void pid_control::start()
 
 void pid_control::calc_dist_turn()
 {
-    int output_l, output_r;
     while (std::abs(m_target_dist - ((chassis_obj->get_trk('l') + chassis_obj->get_trk('r')) / 2)) >= m_gain_tick_range)
     {
         // calc errors
@@ -133,8 +132,8 @@ void pid_control::calc_dist_turn()
         m_derv_r = (m_err_r - m_last_err_r) / m_gain_tick_range;
 
         // assign outputs
-        output_l = static_cast<int>(std::round((m_err_l * m_gain_kP) + (m_derv_l * m_gain_kD)));
-        output_r = static_cast<int>(std::round((m_err_r * m_gain_kP) + (m_derv_r * m_gain_kD)));
+        int output_l = static_cast<int>(std::round((m_err_l * m_gain_kP) + (m_derv_l * m_gain_kD)));
+        int output_r = static_cast<int>(std::round((m_err_r * m_gain_kP) + (m_derv_r * m_gain_kD)));
 
         // clamp values to max and min values
         output_l = std::copysign(
@@ -153,6 +152,10 @@ void pid_control::calc_dist_turn()
         // set prev errors
         m_last_err_l = m_err_l;
         m_last_err_r = m_err_r;
+
+        // save old output
+        m_old_vel_l = output_l;
+        m_old_vel_r = output_r;        
 
         chassis_obj->drive_vol(output_l, output_r);
         pros::delay(m_gain_delta_t);
