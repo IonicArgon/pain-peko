@@ -20,7 +20,7 @@ Shooter::Shooter(
     set_brake(prm_brake);
     set_unit(prm_unit);
     set_cart(prm_cart);
-    set_revr(prm_mtr_ct, prm_mtr_cb, m_mtr_il, m_mtr_ir);
+    set_revr(prm_mtr_ct, prm_mtr_cb, prm_mtr_il, prm_mtr_ir);
 }
 
 Shooter& Shooter::set_brake(pros::motor_brake_mode_e prm_brake)

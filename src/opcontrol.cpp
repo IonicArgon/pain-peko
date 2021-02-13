@@ -23,12 +23,17 @@ void shooting(void);
 void set_itk(int speed);
 void eject(bool itk_yes);
 
+int check_deadzone(int val)
+{
+    return (std::abs(val) > deadzone) ? val : 0;
+}
+
 void driving(void)
 {
     while (!(pros::competition::is_autonomous() || pros::competition::is_disabled()))
     {
-        int pow {(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) > deadzone) ? ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) : 0},
-            trn {(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) > deadzone) ? ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) : 0};
+        int pow {check_deadzone(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y))},
+            trn {check_deadzone(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))};
         chassis_obj->drive_mov(pow + trn, pow - trn);
         pros::delay(10);
     }
