@@ -11,7 +11,7 @@
 #include "lib/utility/misc.hpp"
 
 //* gains
-PID_gains straight_gains {50, 100, 100, 10, 100};
+PID_gains straight_gains {25, 100, 100, 10, 100};
 PID_gains p_turn_gains {50, 100, 100, 10, 100};
 
 //* globals
