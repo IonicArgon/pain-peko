@@ -11,23 +11,14 @@
 #include "lib/utility/misc.hpp"
 
 //* gains
-PID_gains straight_gains {25, 100, 100, 10, 100};
-PID_gains p_turn_gains {50, 100, 100, 10, 100};
+PID_gains straight_gains {5, 0, 100, 10, 100};
 
 //* globals
-int straight_target {0}, turn_target {0};
 int old_vol_left {0}, old_vol_right{0};
-int max_time{0};
+int max_time{99999};
 PID left_side{{}};
 PID right_side{{}};
-void straight_func(void);
-void p_turn_func(void);
-void reset_all(void);
-void wait_until_settled(void);
-
-pros::Task task_straight{straight_func};
-pros::Task task_p_turn{p_turn_func};
-
+void straight_func(int target);
 
 //* skills auto
 void skills(void)
@@ -38,81 +29,64 @@ void skills(void)
 //* live auto
 void live(void)
 {
-    reset_all();
-    task_straight.resume();
-    straight_target = 36.0_in_to_tick;
-    task_straight.notify();
-    wait_until_settled();
-    reset_all();
+    straight_func(24.0_in_to_tick);
+    clear_screen();
 }
 
 //* Autonomous callback
-void autonmous(void)
+void autonomous(void)
 {
-    task_straight.suspend();
-    task_p_turn.suspend();
-
     switch (path_selection)
     {
-    case auto_select::LIVE:
-        live();
-        break;
-    case auto_select::SKILLS:
-        skills();
-        break;
+        case auto_select::LIVE:
+            pros::lcd::print(0, "live selected");
+            live();
+            break;
+        case auto_select::SKILLS:
+            skills();
+            break;
     }
 }
 
 //* turning funcs and stuff
 
-void reset_all(void)
+bool within_range(int target)
 {
-    straight_target = 0;
-    turn_target = 0;
-
-    left_side.reset();
-    right_side.reset();
+    int avg {(chassis_obj.get_trk('l') + chassis_obj.get_trk('r')) / 2};
+    return ((avg - (target + 5)) * (avg - (target - 5)) <= 0);
 }
 
-void wait_until_settled(void)
+void straight_func(int target)
 {
-    while (task_straight.get_state() == pros::E_TASK_STATE_RUNNING || task_p_turn.get_state() == pros::E_TASK_STATE_RUNNING)
-    {pros::delay(5);}
-}
+    int start_time {pros::millis()};
+    left_side.reset().set_gains(straight_gains);
+    right_side.reset().set_gains(straight_gains);
+    chassis_obj.reset_trk();
 
-void straight_func(void)
-{
-    while (task_straight.notify_take(true, TIMEOUT_MAX))
+    while (1)
     {
-        int start_time {pros::millis()};
-        left_side.reset().set_gains(straight_gains);
-        right_side.reset().set_gains(straight_gains);
+        int left_vol = std::clamp(left_side.calculate(target, ((chassis_obj.get_trk('l') + chassis_obj.get_trk('r')) / 2)), 
+        old_vol_left - 500, old_vol_left + 500);
+        int right_vol = std::clamp(right_side.calculate(target, ((chassis_obj.get_trk('l') + chassis_obj.get_trk('r')) / 2)), 
+        old_vol_right - 500, old_vol_right + 500);
 
-        while (
-            std::abs(straight_target - 
-            ((chassis_obj->get_trk('l') + chassis_obj->get_trk('r')) / 2)) > 5 
-            || (left_side.get_derv() > 10 && right_side.get_derv() > 10)
-            || pros::millis() - start_time < max_time)
-        {
-            int left_vol = std::clamp(left_side.calculate(straight_target, ((chassis_obj->get_trk('l') + chassis_obj->get_trk('r')) / 2)), 
-            old_vol_left - 250, old_vol_left + 250);
-            int right_vol = std::clamp(right_side.calculate(straight_target, ((chassis_obj->get_trk('l') + chassis_obj->get_trk('r')) / 2)), 
-            old_vol_right - 250, old_vol_right + 250);
+        chassis_obj.drive_vol(left_vol, right_vol);
+        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), left_vol);
+        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), right_vol);
 
-            chassis_obj->drive_vol(left_vol, right_vol);
+        old_vol_left = left_vol;
+        old_vol_right = right_vol;
 
-            old_vol_left = left_vol;
-            old_vol_right = right_vol;
-        }
+        if (within_range(target))
+            break;
+        else if ((left_side.get_derv() < 0.001 && right_side.get_derv() < 0.001) && (pros::millis() - start_time > 1000))
+            break;
+        else if (pros::millis() - start_time > max_time)
+            break;
 
-        chassis_obj->reset_trk();
+        pros::delay(10);
     }
-}
 
-void p_turn_func(void)
-{
-    while (task_p_turn.notify_take(true, TIMEOUT_MAX))
-    {
-        
-    }
+    chassis_obj.drive_vol(0, 0);
+    chassis_obj.reset_trk();
 }

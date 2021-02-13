@@ -34,7 +34,7 @@ void driving(void)
     {
         int pow {check_deadzone(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y))},
             trn {check_deadzone(ctrl_m.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))};
-        chassis_obj->drive_mov(pow + trn, pow - trn);
+        chassis_obj.drive_mov(pow + trn, pow - trn);
         pros::delay(10);
     }
 }
@@ -61,7 +61,7 @@ void controls(void)
             set_itk(-200);
         else
         {
-            shooter_obj->shooter_set(0, 0, 0);
+            shooter_obj.shooter_set(0, 0, 0);
             counter = 0;
         }
         pros::delay(10);
@@ -81,13 +81,13 @@ void opcontrol(void)
 void indexing(void)
 {
     //TODO: add more precise indexing when we get light sensors
-    shooter_obj->shooter_set(0, 600, 600);
+    shooter_obj.shooter_set(0, 600, 600);
 }
 
 void cycling(void)
 {
     ++counter;
-    shooter_obj->shooter_set(
+    shooter_obj.shooter_set(
         600,
         (counter > cycle_delay) ? 600 : 0,
         (counter > cycle_delay) ? 600 : 0
@@ -97,7 +97,7 @@ void cycling(void)
 void shooting(void)
 {
     ++counter;
-    shooter_obj->shooter_set(
+    shooter_obj.shooter_set(
         600,
         (counter > cycle_delay) ? 600 : 0
     );
@@ -105,12 +105,12 @@ void shooting(void)
 
 void set_itk(int speed)
 {
-    shooter_obj->shooter_set(0, 0, speed);
+    shooter_obj.shooter_set(0, 0, speed);
 }
 
 void eject(bool itk_yes)
 {
-    shooter_obj->shooter_set(
+    shooter_obj.shooter_set(
         -600,
         -600,
         (itk_yes == true) ? -600 : 0

@@ -38,3 +38,10 @@ bool approx_float_eq(double a, double b, double abs_eps, double rel_eps)
     
     return (diff <= (std::max(std::abs(a), std::abs(b)) * rel_eps));
 }
+
+//* clear screen
+void clear_screen(void)
+{
+    for (int i{0}; i < 7; ++i)
+        pros::lcd::clear_line(i);
+}

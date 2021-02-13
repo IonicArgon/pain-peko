@@ -9,8 +9,8 @@
 #include "lib/hardware/drive.hpp"
 #include "lib/hardware/succ.hpp"
 
-extern Chassis* chassis_obj;
-extern Shooter* shooter_obj;
+extern Chassis chassis_obj;
+extern Shooter shooter_obj;
 extern pros::Controller ctrl_m;
 
 enum class auto_select

@@ -9,12 +9,7 @@
 #include "lib/hardware/drive.hpp"
 #include "lib/hardware/succ.hpp"
 #include "lib/hardware/globals.hpp"
-
-void clear_screen(void)
-{
-    for (int i{0}; i < 7; ++i)
-        pros::lcd::clear_line(i);
-}
+#include "lib/utility/misc.hpp"
 
 //* selection screen
 void selection(void)
@@ -55,8 +50,7 @@ void selection(void)
 void initialize(void)
 {
     pros::lcd::initialize();
-    chassis_obj = new Chassis{19, 20, -9, -10, 5, -1};
-    shooter_obj = new Shooter{-15, -8, 17, -7};
+    pros::delay(1000);
 
     selection();
 }
