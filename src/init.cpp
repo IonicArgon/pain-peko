@@ -64,5 +64,5 @@ void competition_initialize(void)
 //* Disbled callback
 void disabled(void)
 {
-
+    clear_screen();
 }

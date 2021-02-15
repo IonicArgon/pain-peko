@@ -43,13 +43,15 @@ int PID::calculate(int prm_target, int prm_current)
     m_err = (double)prm_target - (double)prm_current;
 
     // calc derivative
-    m_derv = (m_err - m_last_err) / 10;
+    m_derv = (m_err - m_last_err) / m_min_Dt;
+
+    m_integral += m_err * m_min_Dt;
 
     // dont integrate if error is too large
-    if (m_err > m_max_integrate)
-        m_integral = 0;
-    // calc integral
-    m_integral += m_err;
+    if (std::abs(m_err) > m_max_integrate || approx_float_eq(m_err, 0.0, 1e-12, 1e-8))
+    {
+        m_integral = 0.0;
+    }
 
 
     // calc output

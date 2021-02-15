@@ -8,7 +8,7 @@
 //* Hardware header
 #include "lib/hardware/globals.hpp"
 
-Chassis chassis_obj {19, 20, -9, -10, -5, -1};
+Chassis chassis_obj {19, 20, -9, -10, -5, 1};
 Shooter shooter_obj {-15, -8, 17, -7};
 
 //* Global controller because i need it

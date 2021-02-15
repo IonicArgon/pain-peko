@@ -71,6 +71,7 @@ void controls(void)
 //* Teleop callback
 void opcontrol(void)
 {
+    chassis_obj.set_brake(pros::E_MOTOR_BRAKE_COAST);
     pros::Task task_drive{driving};
     pros::Task task_ctrll{controls};
 }
