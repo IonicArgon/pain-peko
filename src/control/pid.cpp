@@ -40,12 +40,12 @@ PID& PID::set_gains(PID_gains prm_gains)
 int PID::calculate(int prm_target, int prm_current)
 {
     // calculate error
-    m_err = (double)prm_target - (double)prm_current;
+    m_err = prm_target - prm_current;
 
     // calc derivative
-    m_derv = (m_err - m_last_err) / m_min_Dt;
+    m_derv = (m_err - m_last_err) / 10;
 
-    m_integral += m_err * m_min_Dt;
+    m_integral += (m_err * 10);
 
     // dont integrate if error is too large
     if (std::abs(m_err) > m_max_integrate || approx_float_eq(m_err, 0.0, 1e-12, 1e-8))
