@@ -21,6 +21,7 @@ public:
     Chassis& set_unit(pros::motor_encoder_units_e prm_unit);
     Chassis& set_cart(pros::motor_gearset_e prm_cart);
     Chassis& set_revr(int prm_mtr_lf, int prm_mtr_lb, int prm_mtr_rf, int prm_mtr_rb);
+    Chassis& conf_trk(int prm_trk_l, int prm_trk_r);
     void drive_mov(int prm_mov_l, int prm_mov_r);
     void drive_vel(int prm_vel_l, int prm_vel_r);
     void drive_vol(int prm_vol_l, int prm_vol_r);
@@ -29,7 +30,7 @@ public:
 
 private:
     int m_mtr_lf, m_mtr_lb, m_mtr_rf, m_mtr_rb;
-    pros::ADIEncoder                m_trk_l, m_trk_r;
+    pros::c::adi_encoder_t          m_trk_l, m_trk_r;
     pros::motor_brake_mode_e        m_brake;
     pros::motor_encoder_units_e     m_unit;
     pros::motor_gearset_e           m_cart;

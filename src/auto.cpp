@@ -11,11 +11,11 @@
 #include "lib/utility/misc.hpp"
 
 //* gains
-PID_gains straight_gains {10, 0, 100, 10, 500};
+PID_gains straight_gains {18.0, 0.0, 150.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
-int max_time{10000};
+int max_time{5000};
 PID left_side{{}};
 PID right_side{{}};
 void straight_func(int target);
@@ -29,7 +29,10 @@ void skills(void)
 //* live auto
 void live(void)
 {
-    straight_func(36.0_in_to_tick);
+    straight_func(37.0_in_to_tick);
+    clear_screen();
+    pros::delay(1000);
+    straight_func(-37.0_in_to_tick);
     clear_screen();
 }
 
@@ -60,27 +63,25 @@ void straight_func(int target)
 {
     int start_time {static_cast<int>(pros::millis())};
     left_side.reset().set_gains(straight_gains);
-    right_side.reset().set_gains(straight_gains);
     chassis_obj.reset_trk();
 
     while (1)
     {
         int avg_sides = (chassis_obj.get_trk('l') + chassis_obj.get_trk('r')) / 2;
-        int left_vol = std::clamp(left_side.calculate(target, avg_sides), old_vol_left - 300, old_vol_left + 300);
-        int right_vol = std::clamp(right_side.calculate(target, avg_sides), old_vol_right - 300, old_vol_right + 300);
+        int vol = std::clamp(left_side.calculate(target, avg_sides), old_vol_left - 450, old_vol_left + 450);
 
-        chassis_obj.drive_vol(left_vol, right_vol);
-        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), left_vol);
-        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), right_vol);
+        chassis_obj.drive_vol(vol, vol);
+        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), vol);
+        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), vol);
 
-        old_vol_left = left_vol;
-        old_vol_right = right_vol;
+        old_vol_left = vol;
+        old_vol_right = vol;
 
         
-        if (within_range(target, avg_sides, 2))
+        if (within_range(target, avg_sides, 5))
             break;
-        //else if (pros::millis() - start_time > max_time)
-            //break;
+        else if (pros::millis() - start_time > max_time)
+            ;
 
         pros::delay(10);
     }

@@ -32,8 +32,8 @@ private:
     double m_gain_kD;
     int m_min_Dt;
 
-    double m_err;
-    double m_last_err;
+    int m_err;
+    int m_last_err;
 
     double m_derv;
     int m_last_time;
