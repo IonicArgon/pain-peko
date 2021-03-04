@@ -12,6 +12,7 @@
 
 //* gains
 PID_gains straight_gains {18.0, 0.0, 150.0, 10, 100};
+PID_gains pt_turn_gains {10.0, 0.0, 150.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
@@ -86,6 +87,40 @@ void straight_func(int target)
         pros::delay(10);
     }
 
+    old_vol_left = 0;
+    old_vol_right = 0;
+    chassis_obj.drive_vol(0, 0);
+    chassis_obj.reset_trk();
+}
+
+void pnt_turn_func(int target)
+{
+    int start_time {static_cast<int>(pros::millis())};
+    left_side.reset().set_gains(pt_turn_gains);
+    chassis_obj.reset_trk();
+
+    while (1)
+    {
+        int travel = chassis_obj.get_trk('l');
+        int vol = std::clamp(left_side.calculate(target, travel), old_vol_left -450, old_vol_left + 450);
+
+        chassis_obj.drive_vol(vol, -vol);
+        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), vol);
+        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), vol);
+
+        old_vol_left = vol;
+        old_vol_right = -vol;
+
+        if (within_range(target, travel, 5))
+            break;
+        else if (pros::millis() - start_time > max_time)
+            ;
+
+        pros::delay(10);
+    }
+
+    old_vol_left = 0;
+    old_vol_right = 0;
     chassis_obj.drive_vol(0, 0);
     chassis_obj.reset_trk();
 }
