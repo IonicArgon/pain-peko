@@ -11,9 +11,9 @@
 #include "lib/utility/misc.hpp"
 
 //* gains
-PID_gains straight_gains {18.0, 0.0, 150.0, 10, 100};
-PID_gains pnt_turn_gains {10.0, 0.0, 150.0, 10, 100};
-PID_gains crv_turn_gains {10.0, 0.0, 150.0, 10, 100};
+PID_gains straight_gains {17.75, 0.0, 150.0, 10, 100};
+PID_gains pnt_turn_gains {30.0, 3.0, 200.0, 10, 100};
+PID_gains crv_turn_gains {5.0, 0.0, 150.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
@@ -21,6 +21,8 @@ int max_time{5000};
 PID left_side{{}};
 PID right_side{{}};
 void straight_func(int target);
+void pnt_turn_func(int target);
+//void crv_turn_func(double theta, int dist);
 
 //* skills auto
 void skills(void)
@@ -31,10 +33,7 @@ void skills(void)
 //* live auto
 void live(void)
 {
-    straight_func(37.0_in_to_tick);
-    clear_screen();
-    pros::delay(1000);
-    straight_func(-37.0_in_to_tick);
+    crv_turn_func(90.0_d_to_r, 48.0_in_to_tick);
     clear_screen();
 }
 
@@ -102,12 +101,12 @@ void pnt_turn_func(int target)
 
     while (1)
     {
-        int travel = chassis_obj.get_trk('l');
+        int travel = (chassis_obj.get_trk('l') - chassis_obj.get_trk('r')) / 2;
         int vol = std::clamp(left_side.calculate(target, travel), old_vol_left - 450, old_vol_left + 450);
 
         chassis_obj.drive_vol(vol, -vol);
-        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), vol);
-        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), vol);
+        pros::lcd::print(0, "LT:%i\tLV:%i\tTar:%i", chassis_obj.get_trk('l'), vol, target);
+        pros::lcd::print(1, "RT:%i\tRV:%i", chassis_obj.get_trk('r'), vol);
 
         old_vol_left = vol;
         old_vol_right = -vol;
@@ -126,16 +125,14 @@ void pnt_turn_func(int target)
     chassis_obj.reset_trk();
 }
 
+/*
 void crv_turn_func(double theta, int dist)
 {
     double  radius = (double)dist / theta;
     double  radius_l = radius + 5.75,
             radius_r = radius - 5.75;
-    double  arc_len_l = radius_l * theta,
-            arc_len_r = radius_r * theta;
-    
-    int len_l_tick = std::round((arc_len_l / 3.25) * (360.0 / 3.25));
-    int len_r_tick = std::round((arc_len_r / 3.25) * (360.0 / 3.25));
+    int arc_len_l = std::round(radius_l * theta),
+        arc_len_r = std::round(radius_r * theta);
     
     int start_time {static_cast<int>(pros::millis())};
     left_side.reset().set_gains(crv_turn_gains);
@@ -147,8 +144,8 @@ void crv_turn_func(double theta, int dist)
         int travel_l = chassis_obj.get_trk('l'),
             travel_r = chassis_obj.get_trk('r');
         
-        int vol_l = std::clamp(left_side.calculate(len_l_tick, travel_l), old_vol_left - 450, old_vol_left + 450);
-        int vol_r = std::clamp(right_side.calculate(len_r_tick, travel_r), old_vol_right - 450, old_vol_right + 450);
+        int vol_l = std::clamp(left_side.calculate(arc_len_l, travel_l), old_vol_left - 450, old_vol_left + 450);
+        int vol_r = std::clamp(right_side.calculate(arc_len_r, travel_r), old_vol_right - 450, old_vol_right + 450);
 
         chassis_obj.drive_vol(vol_l, vol_r);
         pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), vol_l);
@@ -157,7 +154,7 @@ void crv_turn_func(double theta, int dist)
         old_vol_left = vol_l;
         old_vol_right = vol_r;
 
-        if (within_range(len_l_tick, travel_l, 5) && within_range(len_r_tick, travel_r, 5))
+        if (within_range(arc_len_l, travel_l, 5) && within_range(arc_len_r, travel_r, 5))
             break;
         else if (pros::millis() - start_time > max_time)
             ;
@@ -170,3 +167,4 @@ void crv_turn_func(double theta, int dist)
     chassis_obj.drive_vol(0, 0);
     chassis_obj.reset_trk();
 }
+*/

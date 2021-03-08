@@ -13,15 +13,15 @@ double wheelbase_length {11.5};
 double wheel_diam {3.25};
 double tick_ratio {360.0};
 
-double deg_to_rad(long double deg)
+double operator"" _d_to_r (long double deg) 
 {
-    return deg * (180 / M_PI);
+    return deg * (M_PI / 180);
 }
-
 int operator"" _deg_to_tick (long double deg)
 {
-    double arclen {(wheelbase_length / 2) * deg_to_rad(deg)};
-    return std::round((arclen / wheel_diam) * (tick_ratio / wheel_diam));
+    double rad = deg * (M_PI / 180);
+    double arclen = wheelbase_length / 2 * rad;
+    return std::round((arclen / (wheel_diam * M_PI)) * tick_ratio);
 }
 
 int operator"" _in_to_tick (long double in)
