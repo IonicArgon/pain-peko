@@ -33,8 +33,7 @@ void skills(void)
 //* live auto
 void live(void)
 {
-    crv_turn_func(90.0_d_to_r, 48.0_in_to_tick);
-    clear_screen();
+
 }
 
 //* Autonomous callback
