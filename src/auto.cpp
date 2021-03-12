@@ -9,6 +9,7 @@
 #include "lib/control/pid.hpp"
 #include "lib/hardware/globals.hpp"
 #include "lib/utility/misc.hpp"
+#include "lib/utility/async.hpp"
 
 //* gains
 PID_gains straight_gains {17.75, 0.0, 150.0, 10, 100};
@@ -33,7 +34,14 @@ void skills(void)
 //* live auto
 void live(void)
 {
-
+    do_async(std::bind(straight_func, 60.0_in_to_tick));
+    shooter_obj.shooter_set(600, 600, 600);
+    pros::delay(500);
+    shooter_obj.shooter_set(0, 0, 0);
+    pros::delay(1000);
+    shooter_obj.shooter_set(-600, -600, -600);
+    pros::delay(750);
+    shooter_obj.shooter_set(0, 0, 0);
 }
 
 //* Autonomous callback
