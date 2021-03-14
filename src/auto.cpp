@@ -13,8 +13,8 @@
 
 //* gains
 PID_gains straight_gains {17.75, 0.0, 150.0, 10, 100};
-PID_gains pnt_turn_gains {30.0, 3.0, 200.0, 10, 100};
-PID_gains crv_turn_gains {5.0, 0.0, 150.0, 10, 100};
+PID_gains pnt_turn_gains {30.0, 0.0, 200.0, 10, 100};
+//PID_gains crv_turn_gains {5.0, 0.0, 150.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
@@ -34,13 +34,16 @@ void skills(void)
 //* live auto
 void live(void)
 {
+    do_async(std::bind(straight_func, 60.0_in_to_tick), 1000);
+    do_async(std::bind(pnt_turn_func, 90.0_deg_to_tick), 2000);
+    do_async(std::bind(pnt_turn_func, 90.0_deg_to_tick), 2000);
     do_async(std::bind(straight_func, 60.0_in_to_tick));
     shooter_obj.shooter_set(600, 600, 600);
-    pros::delay(500);
+    pros::delay(2000);
     shooter_obj.shooter_set(0, 0, 0);
     pros::delay(1000);
     shooter_obj.shooter_set(-600, -600, -600);
-    pros::delay(750);
+    pros::delay(2000);
     shooter_obj.shooter_set(0, 0, 0);
 }
 

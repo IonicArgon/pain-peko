@@ -8,7 +8,8 @@
 #include "api.h"
 #include <queue>
 #include <functional>
+#include <utility>
 
-extern void do_async(std::function<void()> func);
+extern void do_async(std::function<void()> func, uint32_t delay = 1);
 
 #endif
