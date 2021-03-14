@@ -59,6 +59,19 @@ Shooter& Shooter::set_revr(int prm_mtr_ct, int prm_mtr_cb, int prm_mtr_il, int p
     return *this;
 }
 
+double Shooter::get_torq(char mtr) {
+    switch (mtr) {
+        case 't':
+            return pros::c::motor_get_torque(m_mtr_ct);
+        case 'b':
+            return pros::c::motor_get_torque(m_mtr_cb);
+        case 'r':
+            return pros::c::motor_get_torque(m_mtr_ir);
+        case 'l':
+            return pros::c::motor_get_torque(m_mtr_il);
+    };
+}
+
 void Shooter::shooter_set(int prm_vel_ct, int prm_vel_cb, int prm_vel_ik)
 {
     pros::c::motor_move_velocity(m_mtr_ct, prm_vel_ct);

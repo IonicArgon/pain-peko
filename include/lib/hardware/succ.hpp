@@ -20,6 +20,7 @@ public:
     Shooter& set_unit(pros::motor_encoder_units_e prm_unit);
     Shooter& set_cart(pros::motor_gearset_e prm_cart);
     Shooter& set_revr(int prm_mtr_ct, int prm_mtr_cb, int prm_mtr_il, int prm_mtr_ir);
+    double get_torq(char mtr);
     void shooter_set(int prm_vel_ct, int prm_vel_cb, int prm_vel_ik = 0);
 
 private:
