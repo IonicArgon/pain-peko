@@ -6,6 +6,8 @@
 
 #include "lib\utility\async.hpp"
 
+// thanks manas for the idea
+
 static std::queue<std::pair<std::function<void()>, uint32_t>> async_queue;
 
 static pros::Task async_task {[]() {
