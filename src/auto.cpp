@@ -68,6 +68,7 @@ bool within_range(double target, double val, double range)
     return (val > target - range) && (val < target + range);
 }
 
+//TODO: make this more generic so we can reuse it, i dont want code duplication
 void straight_func(int target)
 {
     int start_time {static_cast<int>(pros::millis())};
