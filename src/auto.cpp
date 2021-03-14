@@ -14,7 +14,6 @@
 //* gains
 PID_gains straight_gains {17.75, 0.0, 150.0, 10, 100};
 PID_gains pnt_turn_gains {30.0, 0.0, 200.0, 10, 100};
-//PID_gains crv_turn_gains {5.0, 0.0, 150.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
@@ -23,7 +22,6 @@ PID left_side{{}};
 PID right_side{{}};
 void straight_func(int target);
 void pnt_turn_func(int target);
-//void crv_turn_func(double theta, int dist);
 
 //* skills auto
 void skills(void)
@@ -134,47 +132,3 @@ void pnt_turn_func(int target)
     chassis_obj.drive_vol(0, 0);
     chassis_obj.reset_trk();
 }
-
-/*
-void crv_turn_func(double theta, int dist)
-{
-    double  radius = (double)dist / theta;
-    double  radius_l = radius + 5.75,
-            radius_r = radius - 5.75;
-    int arc_len_l = std::round(radius_l * theta),
-        arc_len_r = std::round(radius_r * theta);
-    
-    int start_time {static_cast<int>(pros::millis())};
-    left_side.reset().set_gains(crv_turn_gains);
-    right_side.reset().set_gains(crv_turn_gains);
-    chassis_obj.reset_trk();
-
-    while (1)
-    {
-        int travel_l = chassis_obj.get_trk('l'),
-            travel_r = chassis_obj.get_trk('r');
-        
-        int vol_l = std::clamp(left_side.calculate(arc_len_l, travel_l), old_vol_left - 450, old_vol_left + 450);
-        int vol_r = std::clamp(right_side.calculate(arc_len_r, travel_r), old_vol_right - 450, old_vol_right + 450);
-
-        chassis_obj.drive_vol(vol_l, vol_r);
-        pros::lcd::print(0, "LT: %i\t LV: %i", chassis_obj.get_trk('l'), vol_l);
-        pros::lcd::print(1, "RT: %i\t RV: %i", chassis_obj.get_trk('r'), vol_r);
-
-        old_vol_left = vol_l;
-        old_vol_right = vol_r;
-
-        if (within_range(arc_len_l, travel_l, 5) && within_range(arc_len_r, travel_r, 5))
-            break;
-        else if (pros::millis() - start_time > max_time)
-            ;
-
-        pros::delay(10);
-    }
-
-    old_vol_left = 0;
-    old_vol_right = 0;
-    chassis_obj.drive_vol(0, 0);
-    chassis_obj.reset_trk();
-}
-*/
