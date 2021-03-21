@@ -2,7 +2,12 @@
 //* Created: 1/27/2021
 //* Last modified: 2/9/2021
 
-#define __P 1;
+
+//! these turn on/off sections of code
+#define __P1;
+//#define __P2;
+//#define __P3;
+//#define __P4;
 
 //* Main header
 #include "main.h"
@@ -28,8 +33,9 @@ void the_succ(void);
 
 //* skills auto
 void skills(void) {
+
 //* part 1
-#if __P == 1 || __P == 2 || __P == 3 || __P == 4
+#if defined(__P1)
     clear_screen();
     //! deploy the hood also scores goal D
     shooter_obj.shooter_set(-600, 0);
@@ -37,12 +43,12 @@ void skills(void) {
     shooter_obj.shooter_set(0, 0);
     //! suck in the first ball and move to goal A and shoot
     do_async(the_succ);     //? asynchronous intaking
-    move_func(24.0_in_to_tick, false, 100);
+    move_func(23.0_in_to_tick, false, 100);
     move_func(-70.0_deg_to_tick, true, 100);
     move_func(12.0_in_to_tick, false, 100);
     shooter_obj.shooter_set(600, 600);  //? does the shooting
-    pros::delay(750);
-    shooter_obj.shooter_set(0, 0);
+    pros::delay(750);                   //?
+    shooter_obj.shooter_set(0, 0);      //?
     //! back out drive and suck ball and move to goal B and shoot
     move_func(10.0_in_to_tick, false, 100);
     move_func(140.0_deg_to_tick, true, 100);
@@ -57,8 +63,9 @@ void skills(void) {
     move_func(-12.0_in_to_tick, false, 100);
     move_func(90.0_deg_to_tick, true, 100);
 #endif
+
 //* part 2
-#if __P == 2 || __P == 3 || __P == 4
+#if defined(__P1) && defined(__P2)
     //! drive forward to suck ball and move to goal C and shoot
     do_async(the_succ);
     move_func(48.0_in_to_tick, false, 100);
@@ -81,8 +88,9 @@ void skills(void) {
     move_func(-2.0_in_to_tick, false, 100);
     move_func(90.0_deg_to_tick, true, 100);
 #endif
+
 //* part 3
-#if __P == 3 || __P == 4
+#if defined(__P1) && defined(__P2) && defined(__P3)
     //! drive forward suck the ball in and go to goal I and shoot
     do_async(the_succ);
     move_func(48.0_in_to_tick, false, 100);
@@ -105,8 +113,9 @@ void skills(void) {
     move_func(-16.0_in_to_tick, false, 100);
     move_func(90.0_deg_to_tick, true, 100);
 #endif
+
 //* part 4
-#if __P == 4
+#if defined(__P1) && defined(__P2) && defined(__P3) && defined(__P4)
     //! drive forward and suck in ball and drive to goal G to shoot
     do_async(the_succ);
     move_func(48.0_in_to_tick, false, 100);
