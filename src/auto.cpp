@@ -43,7 +43,7 @@ void skills(void) {
     shooter_obj.shooter_set(0, 0);
     //! suck in the first ball and move to goal A and shoot
     do_async(the_succ);     //? asynchronous intaking
-    move_func(23.0_in_to_tick, false, 100);
+    move_func(24.0_in_to_tick, false, 100);
     move_func(-70.0_deg_to_tick, true, 100);
     move_func(12.0_in_to_tick, false, 100);
     shooter_obj.shooter_set(600, 600);  //? does the shooting
