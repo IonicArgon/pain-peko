@@ -27,6 +27,7 @@ int old_vol_left {0}, old_vol_right{0};
 int max_time{5000};
 int light_sensor_threshold {(int)std::round(16384 * 
     0.5     // change this value (it's a percentage)
+            // 0 = high sensitivity, 1.0 = low sensitivity
 )};
 PID main_pid{{}};
 void move_func(int target, bool mode, uint32_t delay = 1);
