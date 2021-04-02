@@ -42,7 +42,7 @@ void skills(void) {
     pros::delay(500);
     shooter_obj.shooter_set(0, 0);
     //! suck in the first ball and move to goal A and shoot
-    do_async(the_succ);     //? asynchronous intaking
+    do_async(the_succ, 1);     //? asynchronous intaking
     move_func(24.0_in_to_tick, false, 100);
     move_func(-70.0_deg_to_tick, true, 100);
     move_func(12.0_in_to_tick, false, 100);
@@ -52,7 +52,7 @@ void skills(void) {
     //! back out drive and suck ball and move to goal B and shoot
     move_func(10.0_in_to_tick, false, 100);
     move_func(140.0_deg_to_tick, true, 100);
-    do_async(the_succ);
+    do_async(the_succ, 1);
     move_func(48.0_in_to_tick, false, 100);
     move_func(-90.0_deg_to_tick, true, 100);
     move_func(2.0_in_to_tick, false, 100);
@@ -207,7 +207,7 @@ void move_func(int target, bool mode, uint32_t delay) {
 //* macro defs
 void the_succ(void) {
     shooter_obj.shooter_set(0, 600, 600);
-    while (shooter_obj.get_torq('b') < 0.2) {
+    while (shooter_obj.get_torq('b') < 0.1656) {
         pros::delay(20);
     }
     pros::delay(200);
