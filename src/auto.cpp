@@ -1,6 +1,5 @@
 //* Autonomous control code
 
-
 //! these turn on/off sections of code
 #define __P1 ;
 #define __P2 ;
