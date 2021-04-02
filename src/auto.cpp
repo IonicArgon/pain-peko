@@ -25,7 +25,9 @@ PID_gains pnt_turn_gains {30.0, 0.0, 200.0, 10, 100};
 //* globals
 int old_vol_left {0}, old_vol_right{0};
 int max_time{5000};
-int light_sensor_threshold {(int)std::round(16384 * 0.5)};
+int light_sensor_threshold {(int)std::round(16384 * 
+    0.5     // change this value (it's a percentage)
+)};
 PID main_pid{{}};
 void move_func(int target, bool mode, uint32_t delay = 1);
 
