@@ -1,6 +1,4 @@
 //* Async header source
-//* Created: 3/12/2021
-//* Last modified: 3/12/2021
 
 #include "main.h"
 

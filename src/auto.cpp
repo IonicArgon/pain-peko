@@ -1,6 +1,4 @@
 //* Autonomous control code
-//* Created: 1/27/2021
-//* Last modified: 2/9/2021
 
 
 //! these turn on/off sections of code

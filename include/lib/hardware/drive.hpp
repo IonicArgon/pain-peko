@@ -1,6 +1,4 @@
 //* Driver header file
-//* Created: 1/27/2021
-//* Last modified: 1/30/2021
 
 #ifndef H_CHASSIS_HPP
 #define H_CHASSIS_HPP
