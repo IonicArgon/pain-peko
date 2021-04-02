@@ -9,7 +9,7 @@
 #include "lib/hardware/globals.hpp"
 
 Chassis chassis_obj {19, 20, -9, -10, -5, 1};
-Shooter shooter_obj {-15, -8, 17, -7};
+Shooter shooter_obj {-15, -8, 17, -7, 4, 3};
 
 //* Global controller because i need it
 pros::Controller ctrl_m{pros::controller_id_e_t::E_CONTROLLER_MASTER};

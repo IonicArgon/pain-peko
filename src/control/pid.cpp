@@ -16,7 +16,7 @@
 PID::PID(PID_gains prm_gains)
     : m_gain_kP {prm_gains.prm_gain_kP}, m_gain_kI {prm_gains.prm_gain_kI}, 
       m_gain_kD {prm_gains.prm_gain_kD}, m_min_Dt {prm_gains.prm_min_Dt},
-      m_last_time {pros::millis()}, m_max_integrate{prm_gains.prm_max_integrate}
+      m_last_time {(int)pros::millis()}, m_max_integrate{prm_gains.prm_max_integrate}
     {reset();}
 
 PID& PID::reset(void)
@@ -45,16 +45,7 @@ int PID::calculate(int prm_target, int prm_current)
     m_err = prm_target - prm_current;
 
     // calc derivative
-    m_derv = ((double)m_err - (double)m_last_err) / (double)m_min_Dt;
-
-    /*
-    m_integral += (double)m_err * m_gain;
-
-    // dont integrate if error is too large or approx zero
-    if (std::abs(m_err) > m_max_integrate || m_err == 0)
-        m_integral = 0.0;
-    */
-    
+    m_derv = ((double)m_err - (double)m_last_err) / (double)m_min_Dt;    
 
     // calc output
     m_output = (m_err * m_gain_kP) /*+ m_integral*/ + (m_derv * m_gain_kD);

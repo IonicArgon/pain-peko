@@ -10,6 +10,6 @@
 #include <functional>
 #include <utility>
 
-extern void do_async(std::function<void()> func, uint32_t delay = 1);
+extern void do_async(std::function<void()> func, uint32_t delay = 1u);
 
 #endif
