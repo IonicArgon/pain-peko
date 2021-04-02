@@ -1,6 +1,4 @@
 //* Driver source file
-//* Created: 1/27/2021
-//* Last modified: 1/30/2021
 
 //* Main header
 #include "main.h"
@@ -63,9 +61,9 @@ Chassis& Chassis::set_revr(int prm_mtr_lf, int prm_mtr_lb, int prm_mtr_rf, int p
 Chassis& Chassis::conf_trk(int prm_trk_l, int prm_trk_r)
 {
     pros::c::adi_port_set_config(std::abs(prm_trk_l), pros::E_ADI_DIGITAL_IN);
-    pros::c::adi_port_set_config(std::abs(prm_trk_l) + 1, pros::E_ADI_DIGITAL_IN);	    pros::c::adi_port_set_config(std::abs(prm_trk_l) + 1, pros::E_ADI_DIGITAL_IN);
-    pros::c::adi_port_set_config(std::abs(prm_trk_r), pros::E_ADI_DIGITAL_IN);	    pros::c::adi_port_set_config(std::abs(prm_trk_r), pros::E_ADI_DIGITAL_IN);
-    pros::c::adi_port_set_config(std::abs(prm_trk_r) + 1, pros::E_ADI_DIGITAL_IN);	    pros::c::adi_port_set_config(std::abs(prm_trk_r) + 1, pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_l) + 1, pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_r), pros::E_ADI_DIGITAL_IN);
+    pros::c::adi_port_set_config(std::abs(prm_trk_r) + 1, pros::E_ADI_DIGITAL_IN);
 
     m_trk_l = pros::c::adi_encoder_init(
         std::abs(prm_trk_l),
@@ -116,10 +114,9 @@ int Chassis::get_trk(char prm_trk_side)
     switch (prm_trk_side)
     {
     case 'l':
-        pros::c::adi_encoder_get(m_trk_l);
-        break;
+        return pros::c::adi_encoder_get(m_trk_l);
     case 'r':
-        pros::c::adi_encoder_get(m_trk_r);
-        break;
+        return pros::c::adi_encoder_get(m_trk_r);
     }
+    return 0;
 }

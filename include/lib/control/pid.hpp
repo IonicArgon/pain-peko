@@ -1,6 +1,4 @@
 //* PID header file
-//* Created: 1/27/2021
-//* Last modified: 2/9/2021
 
 #ifndef H_PID_HPP
 #define H_PID_HPP
