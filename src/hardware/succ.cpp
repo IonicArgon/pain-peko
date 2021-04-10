@@ -8,20 +8,20 @@
 
 Shooter::Shooter(
     int prm_mtr_ct, int prm_mtr_cb, int prm_mtr_il, int prm_mtr_ir,
-    int prm_lin_t,  int prm_lin_b,
+    int prm_lht_t,  int prm_lht_b,
     pros::motor_brake_mode_e    prm_brake,
     pros::motor_encoder_units_e prm_unit,
     pros::motor_gearset_e       prm_cart
 )   : m_mtr_ct {std::abs(prm_mtr_ct)}, m_mtr_cb {std::abs(prm_mtr_cb)},
       m_mtr_il {std::abs(prm_mtr_il)}, m_mtr_ir {std::abs(prm_mtr_ir)},
-      adi_lin_t {prm_lin_t}, adi_lin_b {prm_lin_b},
+      adi_lht_t {std::abs(prm_lht_t)}, adi_lht_b {std::abs(prm_lht_b)},
       m_brake {prm_brake}, m_unit {prm_unit}, m_cart {prm_cart}
 {
-    set_brake(prm_brake)
-        .set_unit(prm_unit)
-        .set_cart(prm_cart)
-        .set_revr(prm_mtr_ct, prm_mtr_cb, prm_mtr_il, prm_mtr_ir)
-        .conf_sen(prm_lin_t, prm_lin_b);
+    set_brake(prm_brake);
+    set_unit(prm_unit);
+    set_cart(prm_cart);
+    set_revr(prm_mtr_ct, prm_mtr_cb, prm_mtr_il, prm_mtr_ir);
+    conf_sen(prm_lht_t, prm_lht_b);
 }
 
 Shooter& Shooter::set_brake(pros::motor_brake_mode_e prm_brake)
@@ -60,20 +60,23 @@ Shooter& Shooter::set_revr(int prm_mtr_ct, int prm_mtr_cb, int prm_mtr_il, int p
     return *this;
 }
 
-Shooter& Shooter::conf_sen(int prm_lin_t, int prm_lin_b) {
-    pros::c::adi_port_set_config(prm_lin_t, pros::E_ADI_ANALOG_IN);
-    pros::c::adi_port_set_config(prm_lin_b, pros::E_ADI_ANALOG_IN);
-    pros::c::adi_analog_calibrate(prm_lin_t);
-    pros::c::adi_analog_calibrate(prm_lin_b);
+Shooter& Shooter::conf_sen(int prm_lht_t, int prm_lht_b) {
+    pros::c::adi_port_set_config(std::abs(prm_lht_t), pros::E_ADI_ANALOG_IN);
+    pros::c::adi_port_set_config(std::abs(prm_lht_b), pros::E_ADI_ANALOG_IN);
     return *this;
 }
 
-int Shooter::get_line(char prm_line) {
-    switch (prm_line) {
-        case 't':
-            return pros::c::adi_analog_read_calibrated(adi_lin_t);
-        case 'b':
-            return pros::c::adi_analog_read_calibrated(adi_lin_b);
+Shooter& Shooter::cali_sen() {
+    pros::c::adi_analog_calibrate(adi_lht_t);
+    pros::c::adi_analog_calibrate(adi_lht_b);
+    return *this;
+}
+
+int Shooter::get_light(char prm_lht, bool uncali) {
+    if (uncali) {
+        return pros::c::adi_analog_read((prm_lht == 't' ? adi_lht_t : adi_lht_b));
+    } else {
+        return pros::c::adi_analog_read_calibrated((prm_lht == 't' ? adi_lht_t : adi_lht_b));
     }
     return 0;
 }

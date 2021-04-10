@@ -50,6 +50,11 @@ void initialize(void)
     pros::lcd::initialize();
     pros::delay(1000);
 
+    shooter_obj.cali_sen();
+    pros::lcd::print(0, "calibrate complete");
+    pros::delay(1000);
+
+    clear_screen();
     selection();
 }
 

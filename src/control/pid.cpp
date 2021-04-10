@@ -47,8 +47,6 @@ int PID::calculate(int prm_target, int prm_current)
 
     // calc output
     m_output = (m_err * m_gain_kP) /*+ m_integral*/ + (m_derv * m_gain_kD);
-    pros::lcd::print(2, "ERR: %i\t DIR: %f", m_err, m_derv);
-    pros::lcd::print(3, "INT: %f\t OUT: %i", m_integral, m_output);
 
     // limit output
     if (std::abs(m_output) > 12000)
