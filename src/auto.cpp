@@ -14,6 +14,7 @@
 #include "lib/hardware/globals.hpp"
 #include "lib/utility/misc.hpp"
 #include "lib/utility/async.hpp"
+#include "lib/utility/timer.hpp"
 
 //* gains
 PID_gains straight_gains {18.0, 0.0, 175.0, 10, 100};
@@ -21,20 +22,18 @@ PID_gains pnt_turn_gains {30.0, 0.0, 200.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
-int max_time{5000};
-int light_sensor_threshold {-10};  //? the succ, towards 0 = more sensitive, must be negative always
+int max_time{5000};                 //? current max time set to 5s
+int light_sensor_threshold {-10};   //? the succ, towards 0 = more sensitive, must be negative always
 int the_succ_delay {45};            //? the succ, changes sample rate in ms
 PID main_pid{{}};
 void move_func(int target, bool mode, uint32_t delay = 1);
 
 //* some macros
 void the_succ(int range);
-void the_succ_02(int delay);    //? time based, supply delay in ms
+void the_succ_02(int delay);        //? time based, supply delay in ms
 
 //* skills auto
 void skills(void) {
-
-
 
 //VEBRATO TOMATO, PART 1 INIT IS GOOD TO GO WITH 100% ACC
 //* part 1
@@ -182,7 +181,7 @@ bool within_range(double target, double val, double range) {
 }
 
 void move_func(int target, bool mode, uint32_t delay) {
-    int start_time {static_cast<int>(pros::millis())};
+    Timer timer{};
     main_pid.reset().set_gains((mode) ? pnt_turn_gains : straight_gains);
     chassis_obj.reset_trk();
 
@@ -200,8 +199,8 @@ void move_func(int target, bool mode, uint32_t delay) {
         
         if (within_range(target, travel, 17))
             break;
-        else if (pros::millis() - start_time > max_time)
-            ;
+        else if (timer.get() > max_time)
+            break;
 
         pros::delay(10);
     }
