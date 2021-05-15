@@ -23,7 +23,7 @@ PID_gains pnt_turn_gains {30.0, 0.0, 200.0, 10, 100};
 
 //* globals
 int old_vol_left {0}, old_vol_right{0};
-int max_time{5000};                 //? current max time set to 5s
+int max_time{2500};                 //? current max time set to 5s
 int light_sensor_threshold {-10};   //? the succ, towards 0 = more sensitive, must be negative always
 int the_succ_delay {45};            //? the succ, changes sample rate in ms
 PID main_pid{{}};
@@ -42,30 +42,30 @@ void skills(void) {
     clear_screen();
     //! deploy the hood also scores goal D
     shooter_obj.shooter_set(600, 0);
-    pros::delay(500);
+    pros::delay(300);
     shooter_obj.shooter_set(0, 0);
     //! suck in the first ball and move to goal A and shoot
     do_async(std::bind(the_succ, light_sensor_threshold));  //? asynchronous intaking
     // do_async(std::bind(the_succ_02, 5000));              //? example change
-    move_func(37.0_in_to_tick, false, 100);
-    move_func(-76.0_deg_to_tick, true, 100);
-    move_func(17.0_in_to_tick, false, 100);
+    move_func(37.0_in_to_tick, false, 40);
+    move_func(-74.1_deg_to_tick, true, 10);
+    move_func(17.5_in_to_tick, false, 50);
     shooter_obj.shooter_set(600, 600);  //? does the shooting
-    pros::delay(750);                   //?
+    pros::delay(600);                   //?
     shooter_obj.shooter_set(0, 0);      //?
     //! back out drive and suck ball and move to goal B and shoot
-    move_func(-11.5_in_to_tick, false, 100); //current change
-    move_func(132.0_deg_to_tick, true, 100);
+    move_func(-12.7_in_to_tick, false, 50); //current change
+    move_func(134.9_deg_to_tick, true, 10);
     do_async(std::bind(the_succ, light_sensor_threshold)); 
-    move_func(47.0_in_to_tick, false, 100);
-    move_func(-90.0_deg_to_tick, true, 100);
-    move_func(6.5_in_to_tick, false, 100); //offset change
+    move_func(48.9_in_to_tick, false, 50);
+    move_func(-95.6_deg_to_tick, true, 10);
+    move_func(6.4_in_to_tick, false, 50); //offset change
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! back out and turn
-    move_func(-17.8_in_to_tick, false, 100);
-    move_func(90.0_deg_to_tick, true, 80);
+    move_func(-16.5_in_to_tick, false, 50);
+    move_func(96.7_deg_to_tick, true, 10);
 #endif
 
 
@@ -75,79 +75,76 @@ void skills(void) {
 #if defined(__P1) && defined(__P2)
     //! drive forward to suck ball and move to goal C and shoot
     do_async(std::bind(the_succ, light_sensor_threshold)); //threshold acting kinda gae though
-    move_func(45.0_in_to_tick, false, 60);
-    move_func(-60.0_deg_to_tick, true, 100);
-    move_func(25.0_in_to_tick, false, 100);
+    move_func(45.1_in_to_tick, false, 50);
+    move_func(-64.2_deg_to_tick, true, 10);
+    move_func(23.9_in_to_tick, false, 50);
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! turn around drive forward suck ball drive to goal F and shoot ball
-    move_func(-14.0_in_to_tick, false, 100);
-    move_func(167.0_deg_to_tick, true, 100);
+    move_func(-14.5_in_to_tick, false, 50);
+    move_func(176.5_deg_to_tick, true, 10);
     do_async(std::bind(the_succ, light_sensor_threshold));
-    move_func(47.0_in_to_tick, false, 100); 
-    move_func(-123.0_deg_to_tick, true, 100);
-    move_func(26.0_in_to_tick, false, 100);
+    move_func(50.1_in_to_tick, false, 50); 
+    move_func(-125.5_deg_to_tick, true, 10);
+    move_func(31.9_in_to_tick, false, 50);
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! back out and turn
-    move_func(-2.0_in_to_tick, false, 100);
-    move_func(90.0_deg_to_tick, true, 100);
+    move_func(-6.7_in_to_tick, false, 50);
+    move_func(92.4_deg_to_tick, true, 10);
 #endif
 
 //* part 3
 #if defined(__P1) && defined(__P2) && defined(__P3)
     //! drive forward suck the ball in and go to goal I and shoot
     do_async(std::bind(the_succ, light_sensor_threshold));
-    move_func(48.0_in_to_tick, false, 100);
-    move_func(-45.0_deg_to_tick, true, 100);
-    move_func(6.0_in_to_tick, false, 100);
+    move_func(50.0_in_to_tick, false, 80);
+    move_func(-57.4_deg_to_tick, true, 10);
+    move_func(12.6_in_to_tick, false, 80);
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! back out turn around and drive and suck ball and go to goal H and shoot
-    move_func(-6.0_in_to_tick, false, 100);
-    move_func(135.0_deg_to_tick, true, 100);
+    move_func(-15.0_in_to_tick, false, 80);
+    move_func(138.7_deg_to_tick, true, 10);
     do_async(std::bind(the_succ, light_sensor_threshold));
-    move_func(48.0_in_to_tick, false, 100);
-    move_func(-90.0_deg_to_tick, true, 100);
-    move_func(4.0_in_to_tick, false, 100);
+    move_func(46.3_in_to_tick, false, 80);
+    move_func(-93.4_deg_to_tick, true, 10);
+    move_func(7.8_in_to_tick, false, 80);
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! back out and turn
-    move_func(-16.0_in_to_tick, false, 100);
-    move_func(90.0_deg_to_tick, true, 100);
+    move_func(-17.1_in_to_tick, false, 80);
+    move_func(95.4_deg_to_tick, true, 10);
 #endif
 
 //* part 4
 #if defined(__P1) && defined(__P2) && defined(__P3) && defined(__P4)
     //! drive forward and suck in ball and drive to goal G to shoot
     do_async(std::bind(the_succ, light_sensor_threshold));
-    move_func(48.0_in_to_tick, false, 100);
-    move_func(-70.0_deg_to_tick, true, 100);
-    move_func(12.0_in_to_tick, false, 100);
+    move_func(45.1_in_to_tick, false, 80);
+    move_func(-70.5_deg_to_tick, true, 10);
+    move_func(22.6_in_to_tick, false, 80);
     shooter_obj.shooter_set(600, 600);
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
     //! turn around and suck in the ball
-    move_func(10.0_in_to_tick, false, 100);
-    move_func(180.0_deg_to_tick, true, 100);
+    move_func(-10.1_in_to_tick, false, 80);
+    move_func(177.7_deg_to_tick, true, 10);
     do_async(std::bind(the_succ, light_sensor_threshold));
-    move_func(48.0_in_to_tick, false, 100);
+    move_func(68.0_in_to_tick, false, 80);
     //! reorient robot to be at angle with goal E and try poking out all the balls in the goal
-    move_func(-12.0_in_to_tick, false, 100);    //? back out
-    move_func(50.0_deg_to_tick, true, 100);     //? turn
-    move_func(30.0_in_to_tick, false, 100);     //? drive into the goal poke out first ball
-    move_func(-10.0_in_to_tick, false, 100);
-    move_func(10.0_in_to_tick, false, 100);     //? poke second
-    move_func(-10.0_in_to_tick, false, 100);
-    move_func(10.0_in_to_tick, false, 100);     //? poke third
+    move_func(91.5_deg_to_tick, true, 50);     //? turn
+    shooter_obj.shooter_set(0, 0, -600);
+    move_func(16.0_in_to_tick, false, 80);     //? drive into the goal poke out first ball
+    shooter_obj.shooter_set(0, 0, 0);
     shooter_obj.shooter_set(600, 600);          //? shoot the ball
-    pros::delay(750);
+    pros::delay(600);
     shooter_obj.shooter_set(0, 0);
-    move_func(-24.0_in_to_tick, false, 100);
+    move_func(-15.0_in_to_tick, false, 100);
 #endif
 }
 
