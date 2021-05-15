@@ -5,6 +5,7 @@
 #define __P2 ;
 #define __P3 ;
 #define __P4 ;
+#define __LIVE_ALT ;
 
 //* Main header
 #include "main.h"
@@ -35,7 +36,7 @@ void the_succ_02(int delay);        //? time based, supply delay in ms
 //* skills auto
 void skills(void) {
 
-//VEBRATO TOMATO, PART 1 INIT IS GOOD TO GO WITH 100% ACC
+// whoever wrote this comment had big gay
 //* part 1
 #if defined(__P1)
     clear_screen();
@@ -152,11 +153,59 @@ void skills(void) {
 
 //* live auto
 void live(void) {
-    do_async(std::bind(the_succ, light_sensor_threshold));
-    
-    // move_func(36.0_in_to_tick, false, 100);
-    // move_func(90.0_deg_to_tick, true, 100);
-    // clear_screen();
+#if defined(__LIVE_ALT) //? alternative route
+    shooter_obj.shooter_set(600, 600, 600); //1 start convy flip hood
+    move_func(30.0_in_to_tick, false, 50);  //1  turn into corner
+    move_func(85.0_deg_to_tick, true, 50);  //1
+    move_func(27.5_in_to_tick, false, 50);  //1
+    pros::delay(500);                       //s1 delay
+    shooter_obj.shooter_set(600, 0, 0);     //s1 stop suck
+    pros::delay(500);                       //s1 delay
+    shooter_obj.shooter_set(0, 0, 0);       //s1 stop
+    move_func(-27.5_in_to_tick, false, 50); //2  move to middle
+    move_func(135.0_deg_to_tick, true, 50); //2  
+    move_func(36.0_in_to_tick, false, 50);  //2
+    move_func(-90.0_deg_to_tick, true, 50); //2
+    move_func(24.0_in_to_tick, false, 50);  //2
+    shooter_obj.shooter_set(600, 600);      //s2 shoot
+    pros::delay(750);                       //s2 conv. keeps running to save time
+    move_func(-24.0_in_to_tick, false, 50); //3  move to last corner
+    move_func(90.0_deg_to_tick, true, 50);  //3
+    move_func(36.0_in_to_tick, false, 50);  //3
+    move_func(-45.0_deg_to_tick, true, 50); //3
+    shooter_obj.shooter_set(600, 600, 600); //3  intakes on
+    move_func(27.5_in_to_tick, false, 50);  //3
+    pros::delay(500);                       //s3 delay
+    shooter_obj.shooter_set(600, 0, 0);     //s3 stop suck
+    pros::delay(500);                       //s3 delay
+    move_func(-10.0_in_to_tick, false, 50); //fin (intk keeps running no need to stop its end) 
+
+#else   //? main route
+    shooter_obj.shooter_set(600, 600, 600); //1  start convy flip hood
+    move_func(27.5_in_to_tick, false, 50);  //1  turn into corner
+    move_func(135.0_deg_to_tick, true, 50); //1
+    move_func(27.5_in_to_tick, false, 50);  //1
+    shooter_obj.shooter_set(600, 600, 600); //s1 suck ball, shoot preload
+    pros::delay(500);                       //s1 delay
+    shooter_obj.shooter_set(600, 0, 0);     //s1 stop suck
+    pros::delay(500);                       //s1 delay
+    shooter_obj.shooter_set(0, 0, 0);       //s1 stop
+    move_func(-27.5_in_to_tick, false, 50); //2  move to middle
+    move_func(135.0_deg_to_tick, true, 50); //2  
+    move_func(36.0_in_to_tick, false, 50);  //2
+    move_func(-90.0_deg_to_tick, true, 50); //2
+    move_func(24.0_in_to_tick, false, 50);  //2
+    shooter_obj.shooter_set(600, 600);      //s2 shoot
+    pros::delay(750);                       //s2 conv. keeps running to save time
+    move_func(-53.5_in_to_tick, false, 50); //3  push middle
+    move_func(50.0_deg_to_tick, true, 50);  //4  go to last corner
+    shooter_obj.shooter_set(600, 600, 600); //4  intakes on
+    move_func(51.0_in_to_tick, false, 50);  //4
+    pros::delay(500);                       //s3 intakes/convy already on will cycle shoot
+    shooter_obj.shooter_set(600, 600, 0);   //s3
+    pros::delay(500);                       //s3
+    move_func(-10.0_in_to_tick, false, 50); //fin (intk keeps running no need to stop its end) 
+#endif
 }
 
 //* Autonomous callback
